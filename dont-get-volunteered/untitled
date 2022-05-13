@@ -1,0 +1,22 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+'''
+test
+'''
+import unittest
+import solution
+
+
+class TestStringMethods(unittest.TestCase):
+    '''
+    solution(0, 1)  # 3
+    solution(19, 36)  # 1
+    '''
+
+    def test_solution(self):
+        self.assertEqual(solution.solution(0, 1), 3)
+        self.assertEqual(solution.solution(19, 36), 1)
+
+
+if __name__ == '__main__':
+    unittest.main()

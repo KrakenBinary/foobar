@@ -37,15 +37,8 @@ def solution(src, dest):
     distance_y = int(abs(source[1] - destination[1]))
     distance = [distance_x, distance_y]
 
-    if (source[2] or destination[2]) and distance == [1, 1]:
-        print('4')
-
-    elif distance_x > distance_y:
-        print(bfs[distance_x][distance_y])
-
-    else:
-        print(bfs[distance_y][distance_x])
-
-
-solution(0, 1)  # 3
-solution(19, 36)  # 1
+    if (source[2] or destination[2]) and (distance == [1, 1]):
+        return '4'
+    if distance_x > distance_y:
+        return bfs[distance_x][distance_y]
+    return bfs[distance_y][distance_x]
