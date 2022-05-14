@@ -19,23 +19,39 @@ class TestStringMethods(unittest.TestCase):
     '''
     def test_case1(self):
         '''provided test 1'''
-        self.assertEqual(solution.solution('4', '7'), 4, 'FAIL :: 4|7=4')
+        self.assertEqual(solution.solution('4', '7'), '4')
 
     def test_case2(self):
         '''provided test 2'''
-        self.assertEqual(solution.solution('2', '1'), 1, 'FAIL :: 2|1=1')
+        self.assertEqual(solution.solution('2', '1'), '1')
 
     def test_hide1(self):
         '''basic test area'''
-        self.assertEqual(solution.solution('42', '42'), 0, 'FAIL :: 1|1=0')
+        self.assertEqual(solution.solution('42', '42'), '0')
 
     def test_hide2(self):
         '''need to use BigInteger'''
-        self.assertEqual(solution.solution('10', '1'), 0, 'FAIL :: 1T|1=0')
+        self.assertEqual(solution.solution('2591', '9152'), '26')
 
     def test_hide3(self):
         '''Should not be solvable'''
-        self.assertEqual(solution.solution('8', '4'), 0, 'FAIL :: 1|1=0')
+        self.assertEqual(solution.solution('8', '4'), '0')
+
+    def test_extra1(self):
+        '''Should not be solvable'''
+        self.assertEqual(solution.solution('10000000000000000000000000000000000000000', '10000000000000000000000000000000000000001'), '10000000000000000000000000000000000000000')
+
+    def test_extra2(self):
+        '''Should not be solvable'''
+        self.assertEqual(solution.solution('10000000000000000000000000000000000000000', '1'), '9999999999999999999999999999999999999999')
+
+    def test_extra3(self):
+        '''Should not be solvable'''
+        self.assertEqual(solution.solution('0', '0'), '0')
+
+    def test_extra4(self):
+        '''Should not be solvable'''
+        self.assertEqual(solution.solution('1', '0'), '0')
 
 
 if __name__ == '__main__':
