@@ -1,0 +1,9 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+'''
+Lets rock and roll!
+'''
+
+def solution(l):
+    '''What are we up to now?'''
+    

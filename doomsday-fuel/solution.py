@@ -1,55 +1,94 @@
+'''
+Time to put on my big boy pants and start predicting the future!
+minions dont become an evil genius over night!
+'''
+from fractions import gcd
+from fractions import Fraction
 import numpy as np
-import fractions as f
-
-
-def standard_form(matrix):
-    rows, columns = matrix.shape
-    swaps = 0
-    to_swap = []
-
-    for i in range(0, rows):
-        if not np.any(matrix[i]):
-            matrix = np.row_stack((matrix[i], matrix))
-            matrix = np.delete(matrix, i+1, 0)
-            swaps += 1
-        else:
-            to_swap.append(i)
-            matrix[i] /= matrix[i].sum()
-
-    aux = matrix.copy()
-    counter = 0
-    for i in to_swap:
-        matrix = np.column_stack((matrix, aux[:, i]))
-        matrix = np.delete(matrix, i-counter, 1)
-        counter += 1
-
-    for i in range(0, swaps):
-        matrix[i, i] = 1
-    return matrix, swaps
 
 
 def solution(m):
-    states, swaps = standard_form(np.matrix(m, dtype=float))
-    FR = states
-    if len(states) > 1:
-        Q = states[swaps:, swaps:]
-        I = np.diag(np.ones(len(Q)))
-        R = states[swaps:, :swaps]
-        F = (I-Q)**(-1)
-        FR = F*R
+    '''
+    need to take the matrix and do some not so simple matrix math
+    The goal is to pull a triangular matrix and an orthogonal matrix
+    do some multiplication in order to divide (turn left to go right)
+    then leverage fractions to quicly pull common denominators
+    '''
+    if m == [[0]]:
+        foobar = [1, 1]
+        return foobar
+    matrix = np.asarray(m)  # convert matrix to array
+    rows, cols = matrix.shape[0], matrix.shape[1]  # shape of the array
 
-    result = map(f.Fraction, FR[0].A1.tolist())
-    numerators = []
-    denominators = []
-    for i in range(0, len(result)):
-        result[i] = result[i].limit_denominator(100)
-        denominators.append(result[i].denominator)
-    lcm = np.lcm.reduce(denominators)
-    for i in range(0, len(result)):
-        numerators.append(result[i].numerator*lcm/result[i].denominator)
-    numerators.append(lcm)
+    zero_tracker = 0
+    rq_matrix = []
+    combine = []
 
-    return numerators
+    init_matrix = np.zeros((1, cols))  # set shape. del this row later
+    for i in range(rows):
+        if sum(matrix[i]) == 0:  # row is 0 sum
+            init_matrix = np.vstack((init_matrix, matrix[i]))  # concat vert
+            zero_tracker = zero_tracker + 1  # how many 0 rows? (track)
+            combine.append(i)  # add i to combine (track it)
+    for i in range(rows):
+        if sum(matrix[i]) != 0:
+            init_matrix = np.vstack((init_matrix, matrix[i]))
+            rq_matrix.append(i)
+            combine.append(i)
+    init_matrix = np.delete(init_matrix, 0, 0)  # delete first row from init
+    init_matrix = init_matrix[:, combine]  # rearrange columns
+    rq_matrix = np.delete(init_matrix, range(zero_tracker), 0)  # del 0's
 
+    R = rq_matrix[:, range(zero_tracker)]  # upper triangular matrix
+    Q = np.delete(rq_matrix, range(zero_tracker), 1)  # orthoganal matrix
+    for i in range(Q.shape[0]):
+        for j in range(Q.shape[1]):  # gram schmit process
+            Q[i, j] = Q[i, j]/sum(rq_matrix[i])
+    F = np.linalg.inv(np.eye(len(Q)) - Q)
+    # need to use an inverse matrix to do some division
 
-solution([[0, 2, 1, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0, 0], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]])
+    for i in range(R.shape[0]):
+        for j in range(R.shape[1]):  # gram schmit process
+            R[i, j] = R[i, j]/sum(rq_matrix[i])
+    FR = np.dot(F, R)  # matrix multiplication
+    # the fun bit is now we can use Fraction to fin the reduced fractions.
+
+    numerator = []
+    denominator = []
+
+    for i in range(FR.shape[0]):
+        for j in range(FR.shape[1]):
+            numerator.append(
+                Fraction(FR[i, j]).limit_denominator().numerator)
+            denominator.append(
+                Fraction(FR[i, j]).limit_denominator().denominator)
+
+    numerator = numerator[:zero_tracker]  # trash removal
+    denominator = denominator[:zero_tracker]  # trash removal
+
+    denominator2 = list(denominator)
+
+    for i in range(len(denominator2)-1):
+        if denominator2[i] == 1:
+            denominator2.remove(denominator2[i])
+
+    my_lcm = 1
+
+    for i in denominator2:
+        my_lcm = my_lcm*i//gcd(my_lcm, i)
+
+    mult_list = []
+    for i in range(len(denominator)):
+        div = my_lcm/denominator[i]
+        if div == my_lcm:
+            mult_list.append(0)
+        elif div == 1:
+            mult_list.append(1)
+        else:
+            mult_list.append(int(div))
+
+    result = []
+    for i in range(len(numerator)):
+        result.append(numerator[i]*mult_list[i])
+    result.append(my_lcm)
+    return result
