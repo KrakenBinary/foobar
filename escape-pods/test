@@ -1,0 +1,46 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
+'''
+test
+'''
+import unittest
+import solution
+# import nexty as solution
+
+class TestStringMethods(unittest.TestCase):
+    '''
+    notes here
+    '''
+    """
+    def test_case1(self):
+        '''provided test 1'''
+        self.assertEqual(solution.solution(
+                                            [0],
+                                            [3],
+                                            [
+                                            [0, 7, 0, 0],
+                                            [0, 0, 6, 0],
+                                            [0, 0, 0, 8],
+                                            [9, 0, 0, 0]]), 6)
+    """
+    def test_case2(self):
+        '''provided test 2'''
+        self.assertEqual(solution.solution(
+                                            [0, 1],
+                                            [4, 5],
+                                            [
+                                            [0, 0, 4, 6, 0, 0, 0, 0, 0, 6, 6],
+                                            [0, 0, 5, 2, 0, 0, 0, 5, 2, 0, 0],
+                                            [0, 0, 0, 0, 6, 6, 0, 0, 0, 4, 4],
+                                            [0, 0, 0, 0, 0, 0, 6, 6, 0, 6, 6],
+                                            [0, 0, 0, 0, 0, 0, 6, 6, 0, 0, 0],
+                                            [0, 0, 4, 6, 0, 0, 0, 0, 0, 6, 6],
+                                            [0, 0, 5, 2, 0, 0, 0, 5, 2, 0, 0],
+                                            [0, 0, 0, 0, 6, 6, 0, 0, 0, 4, 4],
+                                            [0, 0, 0, 0, 0, 0, 6, 6, 0, 6, 6],
+                                            [0, 0, 0, 0, 0, 0, 6, 6, 0, 0, 0],
+                                            [0, 0, 0, 0, 6, 6, 0, 0, 0, 0, 0]]), 36)
+
+
+if __name__ == '__main__':
+    unittest.main()
